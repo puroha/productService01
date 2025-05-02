@@ -14,6 +14,7 @@ public class Category extends BaseModel {
 //    private Long id;
 //    private String title;
 
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
 

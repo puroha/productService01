@@ -62,7 +62,16 @@ public class SelfProductService implements ProductService {
     }
 
     @Override
-    public void deleteProductById(Long id) {
+    public void deleteProductById(Long id) throws ProductNotFoundException {
+        // Check if product with the given ID exists
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(
+                        "Product not found with Id: " + id,
+                        1005
+                ));
+
+        // Delete the product
+        productRepository.delete(existingProduct);
 
     }
 
@@ -99,5 +108,45 @@ public class SelfProductService implements ProductService {
 
         // Save and return the updated product
         return productRepository.save(existingProduct);
+    }
+
+    @Override
+    public List<Product> getProductsByCategory(String category) throws ProductNotFoundException, GenericProductException {
+
+        System.out.println("Checking category... " + category);
+        Long count = categoryRepository.existCategoryByTitle(category);
+        System.out.println("Count found for category " + count);
+
+        if (categoryRepository.existCategoryByTitle(category) == 0) {
+            throw new GenericProductException(
+                    "Category not found with title: " + category,
+                    1008
+            );
+        }
+
+        System.out.println("Reached here, Category exists: " + category);
+        List<Product> products = productRepository.findByCategoryTitle(category);
+
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException(
+                    "No products found in category: " + category,
+                    1006
+            );
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> getProductsByTitleContaining(String title) throws ProductNotFoundException {
+
+        List<Product> products = productRepository.findByTitleContaining(title);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException(
+                    "No products found containing title: " + title,
+                    1007
+            );
+        }
+
+        return products;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.productservice01.services;
 
 import com.example.productservice01.dtos.FakeStoreProductDto;
+import com.example.productservice01.exceptions.GenericProductException;
 import com.example.productservice01.exceptions.ProductNotFoundException;
 import com.example.productservice01.models.Category;
 import com.example.productservice01.models.Product;
@@ -122,6 +123,16 @@ public class ProductServiceByFakeStore implements ProductService {
             throw new RuntimeException("API error: " + e.getStatusText(), e);
         }
 
+    }
+
+    @Override
+    public List<Product> getProductsByCategory(String category) throws ProductNotFoundException, GenericProductException {
+        return List.of();
+    }
+
+    @Override
+    public List<Product> getProductsByTitleContaining(String title) throws ProductNotFoundException {
+        return List.of();
     }
 
 }

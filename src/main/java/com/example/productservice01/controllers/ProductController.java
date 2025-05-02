@@ -48,14 +48,28 @@ public class ProductController {
 
         return responseEntity;
 //        return ResponseEntity.ok(productService.getProduct(id));
-
-
     }
 
     @GetMapping()
     public List<Product> getAllProducts() {
         // Logic to retrieve all products from the database
         return productService.getAllProducts();
+    }
+
+    // Example method to get products by category
+    @GetMapping("/productsByCategory/{categoryTitle}")
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("categoryTitle") String categoryTitle) throws ProductNotFoundException, GenericProductException {
+        // Logic to retrieve products by category from the database
+
+        List<Product> productList = productService.getProductsByCategory(categoryTitle);
+        return new ResponseEntity<>(productList, HttpStatus.OK);
+    }
+
+    @GetMapping("/productsByTitle/{title}")
+    public ResponseEntity<List<Product>> getProductsByTitleContaining(@PathVariable("title") String title) throws ProductNotFoundException {
+        // Logic to retrieve products by title from the database
+        List<Product> productList = productService.getProductsByTitleContaining(title);
+        return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -74,10 +88,14 @@ public class ProductController {
         // Logic to create a new product in the database
     }
 
-    // Example method to delete a product
-    public void deleteProductById() {
-        // Logic to delete a product from the database
+    // Method to delete a product
+    @PutMapping("/delete/{id}")
+    public void deleteProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
+        productService.deleteProductById(id);
     }
+
+
+
 
     // this is like a catch (global exception handler) for all the methods, not just put
     @ExceptionHandler(ProductNotFoundException.class)

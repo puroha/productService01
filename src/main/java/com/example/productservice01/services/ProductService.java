@@ -20,9 +20,12 @@ public interface ProductService {
     Product createProduct (Product product) throws GenericProductException;
 
     // Example method to delete a product
-    void deleteProductById(Long Id);
+    void deleteProductById(Long Id) throws ProductNotFoundException ;
 
     List<Product> getAllProducts();
 
     Product updateProductById (Long id, Product product) throws ProductNotFoundException;
+
+    List<Product> getProductsByCategory(String category) throws ProductNotFoundException, GenericProductException ;
+    List<Product> getProductsByTitleContaining(String title) throws ProductNotFoundException;
 }
